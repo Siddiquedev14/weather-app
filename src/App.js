@@ -1,6 +1,6 @@
 // ibne
 import React, { useState } from "react";
-import { Box, Container, Grid, Link, SvgIcon, Typography } from "@mui/material";
+import { Box, Container, Grid, SvgIcon, Typography } from "@mui/material";
 import Search from "./components/Search/Search";
 import WeeklyForecast from "./components/WeeklyForecast/WeeklyForecast";
 import TodayWeather from "./components/TodayWeather/TodayWeather";
@@ -9,14 +9,13 @@ import { transformDateFormat } from "./utilities/DatetimeUtils";
 import UTCDatetime from "./components/Reusable/UTCDatetime";
 import LoadingBox from "./components/Reusable/LoadingBox";
 import { ReactComponent as SplashIcon } from "./assets/splash-icon.svg";
-import Logo from "./assets/logo.png";
 import ErrorBox from "./components/Reusable/ErrorBox";
 import { ALL_DESCRIPTIONS } from "./utilities/DateConstants";
-import GitHubIcon from "@mui/icons-material/GitHub";
 import {
   getTodayForecastWeather,
   getWeekForecastWeather,
 } from "./utilities/DataUtils";
+import PublicIcon from "@mui/icons-material/Public";
 
 function App() {
   const [todayWeather, setTodayWeather] = useState(null);
@@ -152,66 +151,114 @@ function App() {
   }
 
   return (
-    <Container
-      sx={{
-        maxWidth: { xs: "95%", sm: "80%", md: "1100px" },
-        width: "100%",
-        height: "100%",
-        margin: "0 auto",
-        padding: "1rem 0 3rem",
-        marginBottom: "1rem",
-        borderRadius: {
-          xs: "none",
-          sm: "0 0 1rem 1rem",
-        },
-        boxShadow: {
-          xs: "none",
-          sm: "rgba(0,0,0, 0.5) 0px 10px 15px -3px, rgba(0,0,0, 0.5) 0px 4px 6px -2px",
-        },
-      }}
-    >
-      <Grid container columnSpacing={2}>
-        <Grid item xs={12}>
+    <>
+      {/* Main Content Wrapper for vertical centering */}
+      <div className="main-content-wrapper">
+        {/* Header */}
+        <Box className="header-modern">
+          <Typography variant="h2" component="h1" className="header-title">
+            smart-weather-app
+          </Typography>
+          <Typography variant="subtitle1" className="header-subtitle">
+            by Siddique Raza
+          </Typography>
+          <div className="header-divider"></div>
+        </Box>
+
+        {/* Search Bar Modern Card Section */}
+        <Box className="search-section-modern ">
+          <span className="search-datetime-modern">
+            <UTCDatetime />
+          </span>
+          <span className="search-label-modern">
+            <PublicIcon
+              className="icon"
+              sx={{ fontSize: "1.4rem", mr: 1, color: "#00e676" }}
+            />
+            Search for any city worldwide
+          </span>
+          <Box className="search-bar-modern">
+            <Search onSearchChange={searchChangeHandler} />
+          </Box>
+        </Box>
+
+        {/* Main Weather Card */}
+        <Container
+          sx={{
+            maxWidth: { xs: "100%", sm: "98%", md: "1200px" },
+            width: "100%",
+            margin: "0 auto",
+            padding: {
+              xs: "0.2rem 0.1rem 1.2rem",
+              sm: "0.5rem 0.2rem 1.5rem",
+              md: "1rem 0.5rem 2rem",
+            },
+            marginBottom: { xs: "0.2rem", sm: "0.5rem" },
+            borderRadius: { xs: "0", sm: "22px" },
+            background: "rgba(255,255,255,0.03)",
+          }}
+        >
           <Box
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
+            className="modern-card"
             sx={{
+              display: "flex",
+              flexDirection: { xs: "column", md: "row" },
+              gap: { xs: 3, md: 4 },
+              alignItems: "stretch",
+              justifyContent: "center",
               width: "100%",
-              marginBottom: "1rem",
+              p: { xs: 1, sm: 2, md: 3 },
             }}
           >
-            <Box
-              component="img"
-              sx={{
-                height: { xs: "16px", sm: "22px", md: "26px" },
-                width: "auto",
-              }}
-              alt="logo"
-              src={Logo}
-            />
-
-            <UTCDatetime />
-            <Link
-              href="https://github.com/Amin-Awinti"
-              target="_blank"
-              underline="none"
-              sx={{ display: "flex" }}
-            >
-              <GitHubIcon
-                sx={{
-                  fontSize: { xs: "20px", sm: "22px", md: "26px" },
-                  color: "white",
-                  "&:hover": { color: "#2d95bd" },
-                }}
-              />
-            </Link>
+            {/* Left: Current Weather */}
+            <Box sx={{ flex: 1, minWidth: 0 }}>
+              {/* Render only the CURRENT WEATHER part of appContent */}
+              {todayWeather && todayForecast && weekForecast ? (
+                <TodayWeather
+                  data={todayWeather}
+                  forecastList={todayForecast}
+                />
+              ) : (
+                appContent
+              )}
+            </Box>
+            {/* Right: Weekly Forecast */}
+            <Box sx={{ flex: 1, minWidth: 0 }}>
+              {todayWeather && todayForecast && weekForecast ? (
+                <WeeklyForecast data={weekForecast} />
+              ) : null}
+            </Box>
           </Box>
-          <Search onSearchChange={searchChangeHandler} />
-        </Grid>
-        {appContent}
-      </Grid>
-    </Container>
+          {/* Footer */}
+          <Box
+            sx={{
+              width: "100%",
+              textAlign: "center",
+
+              left: 0,
+              bottom: 0,
+              py: 1.5,
+              background: "transparent",
+              zIndex: 100,
+            }}
+          >
+            <Typography
+              variant="body2"
+              sx={{
+                color: "rgba(255,255,255,0.85)",
+                fontFamily: "Poppins",
+                fontSize: { xs: "0.9rem", sm: "1rem" },
+                letterSpacing: "1px",
+              }}
+            >
+              Made with{" "}
+              <span style={{ color: "#DC2941", fontWeight: 700 }}>❤️</span> by
+              Siddique Raza | smart-weather-app
+            </Typography>
+          </Box>
+        </Container>
+      </div>
+    </>
   );
 }
 

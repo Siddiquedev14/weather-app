@@ -37,48 +37,63 @@ const Search = ({ onSearchChange }) => {
   const customStyles = {
     control: (provided, state) => ({
       ...provided,
-      backgroundColor: "rgba(255, 255, 255, 0.1)",
-      border: "1px solid rgba(255, 255, 255, 0.3)",
-      borderRadius: "10px",
+      backgroundColor: "rgba(255, 255, 255, 0.13)",
+      border: "1.5px solid rgba(255,255,255,0.18)",
+      borderRadius: "12px",
+      minHeight: 48,
+      color: "#fff",
       boxShadow: state.isFocused
-        ? "0 0 0 2px rgba(255, 255, 255, 0.2)"
+        ? "0 0 0 2px rgba(100, 181, 246, 0.2)"
         : "none",
       "&:hover": {
-        border: "1px solid rgba(255, 255, 255, 0.5)",
+        border: "1.5px solid #6a82fb",
       },
     }),
     menu: (provided) => ({
       ...provided,
-      backgroundColor: "rgba(0, 0, 0, 0.9)",
-      border: "1px solid rgba(255, 255, 255, 0.2)",
-      borderRadius: "10px",
+      background: "rgba(30, 60, 114, 0.97)",
+      borderRadius: "16px",
+      boxShadow: "0 8px 32px 0 rgba(31,38,135,0.25)",
+      marginTop: 4,
+      zIndex: 20,
+      position: "absolute",
+      left: 0,
+      right: 0,
+      overflow: "hidden",
     }),
     option: (provided, state) => ({
       ...provided,
-      backgroundColor: state.isFocused
-        ? "rgba(255, 255, 255, 0.1)"
-        : "transparent",
-      color: "white",
-      "&:hover": {
-        backgroundColor: "rgba(255, 255, 255, 0.1)",
-      },
+      background: state.isFocused ? "rgba(100, 181, 246, 0.18)" : "transparent",
+      color: "#fff",
+      cursor: "pointer",
+      padding: "10px 16px",
+      fontSize: "1rem",
+      transition: "background 0.15s",
     }),
     singleValue: (provided) => ({
       ...provided,
-      color: "white",
+      color: "#fff",
     }),
     input: (provided) => ({
       ...provided,
-      color: "white",
+      color: "#fff",
     }),
     placeholder: (provided) => ({
       ...provided,
       color: "rgba(255, 255, 255, 0.7)",
     }),
+    menuList: (provided) => ({
+      ...provided,
+      padding: 0,
+    }),
+    menuPortal: (base) => ({
+      ...base,
+      zIndex: 9999,
+    }),
   };
 
   return (
-    <Box sx={{ width: "100%", marginBottom: "2rem" }}>
+    <Box sx={{ width: "100%" }}>
       <Typography
         variant="h6"
         sx={{
@@ -87,9 +102,7 @@ const Search = ({ onSearchChange }) => {
           textAlign: "center",
           fontWeight: 500,
         }}
-      >
-        🌍 Search for any city worldwide
-      </Typography>
+      ></Typography>
       <AsyncPaginate
         placeholder="Type city name (e.g., London, New York, Tokyo)..."
         debounceTimeout={600}
@@ -97,6 +110,7 @@ const Search = ({ onSearchChange }) => {
         onChange={onChangeHandler}
         loadOptions={loadOptions}
         styles={customStyles}
+        menuPortalTarget={document.body}
         noOptionsMessage={() => "No cities found. Try a different search term."}
         loadingMessage={() => "Searching cities..."}
         isClearable={true}
